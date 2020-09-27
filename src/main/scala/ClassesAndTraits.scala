@@ -14,6 +14,8 @@
 // to skip it (leave unimplemented), the primary intent of this
 // exercise is modelling using case classes and traits, and not math.
 
+package ClassesAndTraits
+
 class ClassesAndTraits extends App {
   sealed trait Shape[A] extends Located with Bounded with Movable[A]
 
