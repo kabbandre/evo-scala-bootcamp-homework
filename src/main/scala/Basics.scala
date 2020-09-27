@@ -4,7 +4,7 @@
 // def lcm(a: Int, b: Int): Int = ???
 // def gcd(a: Int, b: Int): Int = ???
 
-package com.evolutiongaming.bootcamp.basics
+package Basics
 
 class Basics extends App {
   def lcm(a: Int, b: Int): Int = if (List(a, b).exists(_ == 0)) 0 else (a * b).abs / gcd(a, b)
