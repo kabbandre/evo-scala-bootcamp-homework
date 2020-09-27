@@ -1,0 +1,3 @@
+class ClassesAndTraits extends App {
+
+}
