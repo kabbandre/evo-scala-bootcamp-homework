@@ -102,10 +102,10 @@ object ControlStructures {
         case 0 => Left(ErrorMessage("You cannot divide by zero"))
         case _ => Right(ResultMessage(Divide(dividend, divisor)))
       }
-      case Sum(numbers)               => Right(ResultMessage(Sum(numbers)))
-      case Average(numbers)           => Right(ResultMessage(Average(numbers)))
-      case Min(numbers)               => Right(ResultMessage(Min(numbers)))
-      case Max(numbers)               => Right(ResultMessage(Max(numbers)))
+      case Sum(_)               => Right(ResultMessage(x))
+      case Average(_)           => Right(ResultMessage(x))
+      case Min(_)               => Right(ResultMessage(x))
+      case Max(_)               => Right(ResultMessage(x))
     }
   }
 
