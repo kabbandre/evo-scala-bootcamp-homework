@@ -30,43 +30,20 @@ object ControlStructures {
   // In case of commands that cannot be parsed or calculations that cannot be performed,
   // output a single line starting with "Error: "
 
-  sealed trait Command {
-    def calculate(): Double
-  }
+  sealed trait Command
   object Command {
-    final case class Divide(dividend: Double, divisor: Double) extends Command {
-      override def calculate(): Double = dividend / divisor
-    }
-    final case class Sum(numbers: List[Double]) extends Command {
-      override def calculate(): Double = numbers.sum
-    }
-    final case class Average(numbers: List[Double]) extends Command {
-      override def calculate(): Double = numbers.sum / numbers.length
-    }
-    final case class Min(numbers: List[Double]) extends Command {
-      override def calculate(): Double = numbers.min
-    }
-    final case class Max(numbers: List[Double]) extends Command {
-      override def calculate(): Double = numbers.max
-    }
+    final case class Divide(dividend: Double, divisor: Double) extends Command
+    final case class Sum(numbers: List[Double]) extends Command
+    final case class Average(numbers: List[Double]) extends Command
+    final case class Min(numbers: List[Double]) extends Command
+    final case class Max(numbers: List[Double]) extends Command
   }
 
   final case class ErrorMessage(value: String) {
     override def toString: String = s"Error: $value"
   }
 
-  sealed trait Result
-  final case class ResultMessage(command: Command) extends Result {
-    override def toString: String = {
-      command match {
-        case Divide(dividend, divisor)    => s"$dividend divided by $divisor is ${command.calculate()}"
-        case Sum(numbers)                 => s"the sum of ${numbers.mkString(" ")} is ${command.calculate()}"
-        case Average(numbers)             => s"the average of ${numbers.mkString(" ")} is ${command.calculate()}"
-        case Min(numbers)                 => s"the min of ${numbers.mkString(" ")} is ${command.calculate()}"
-        case Max(numbers)                 => s"the max of ${numbers.mkString(" ")} is ${command.calculate()}"
-      }
-    }
-  }
+  final case class Result(value: Double, command: Command)
 
   def parseCommand(x: String): Either[ErrorMessage, Command] = {
     def parseNumbers(list: List[String]): List[Double] = {
@@ -96,22 +73,29 @@ object ControlStructures {
 
   // should return an error (using `Left` channel) in case of division by zero and other
   // invalid operations
-  def calculate(x: Command): Either[ErrorMessage, Result] = {
-    x match {
+  def calculate(x: Command): Either[ErrorMessage, Result] = x match {
       case Divide(dividend, divisor)  => divisor match {
         case 0 => Left(ErrorMessage("You cannot divide by zero"))
-        case _ => Right(ResultMessage(Divide(dividend, divisor)))
+        case _ => Right(Result(dividend / divisor, x))
       }
-      case Sum(_)               => Right(ResultMessage(x))
-      case Average(_)           => Right(ResultMessage(x))
-      case Min(_)               => Right(ResultMessage(x))
-      case Max(_)               => Right(ResultMessage(x))
+      case Sum(numbers)               => Right(Result(numbers.sum, x))
+      case Average(numbers)           => Right(Result(numbers.sum / numbers.length, x))
+      case Min(numbers)               => Right(Result(numbers.min, x))
+      case Max(numbers)               => Right(Result(numbers.max, x))
     }
-  }
 
 
-  def renderResult(x: Result): String = {
-    x.toString
+  def renderResult(result: Result): String = {
+    def numbersResult(word: String, numbers: List[Double]): String = {
+      s"the $word of ${numbers.mkString(" ")} is ${result.value}"
+    }
+    result.command match {
+      case Divide(dividend, divisor)  => s"$dividend divided by $divisor is ${result.value}"
+      case Sum(numbers)               => numbersResult("sum", numbers)
+      case Average(numbers)           => numbersResult("average", numbers)
+      case Min(numbers)               => numbersResult("minimum", numbers)
+      case Max(numbers)               => numbersResult("maximum", numbers)
+    }
   }
 
   def process(x: String): String = {
