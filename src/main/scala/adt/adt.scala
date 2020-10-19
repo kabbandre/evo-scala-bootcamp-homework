@@ -19,7 +19,7 @@ package adt
 // https://nrinaudo.github.io/scala-best-practices/definitions/adt.html
 // https://alvinalexander.com/scala/fp-book/algebraic-data-types-adts-in-scala/
 // https://en.wikipedia.org/wiki/Algebraic_data_type
-package object adt {
+object adt {
   sealed trait Suit
   object Suit {
     final case object Clubs extends Suit
