@@ -58,7 +58,7 @@ package object adt {
     }
   }
 
-  final case class Card private (rank: Rank, suit: Suit)
+  final case class Card (rank: Rank, suit: Suit)
 
   final case class Hand (cards: Set[Card])
   object Hand {
